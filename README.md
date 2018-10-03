@@ -13,7 +13,7 @@ Turn all forms into ajax requests.
 </form>
 ```
 
-so when changes are made to ice_id in the first form, it updates it in another where `data-bind="filter.id"`
+so when changes are made to input `id` in the first form, it updates it in the second where `data-bind="filter.id"` matches.
 
 For server-side response (PHP for example);
 
