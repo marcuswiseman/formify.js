@@ -1,5 +1,5 @@
 # formify.js
-Turn all forms into ajax requests.
+Turn all forms into ajax requests. (jQuery Plugin ~ v2 - v3.3.1+)
 ```
 <form class="formify" method="GET" data-action="filter">
     <input type="text" name="id">
