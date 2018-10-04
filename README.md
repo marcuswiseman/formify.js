@@ -12,8 +12,7 @@ Turn all forms into ajax requests. (jQuery Plugin ~ v2 - v3.3.1+)
     <input type="submit" value="Add">
 </form>
 ```
-
-so when changes are made to input `id` in the first form, it updates it in the second where `data-bind="filter.id"` matches.
+Bind two inputs of two forms (or more) together using `data-bind`, so when changes are made to input `id` in the first form, it updates it in the second where `data-bind="filter.id"` matches.
 
 For server-side response (PHP for example);
 
