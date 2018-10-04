@@ -74,6 +74,7 @@ $(function () {
 
 		var $this = $(this);
 
+		var method = typeof($($this).attr('method')) !== 'undefined' ? $($this).attr('method') : 'GET';
 		var url = typeof($($this).attr('action')) !== 'undefined' ? $($this).attr('action') : '';
 		var base_url = url.indexOf('?') != -1 ? url.split('?')[0] : url;
 		if (url != '') {
@@ -81,14 +82,6 @@ $(function () {
 		}
 
 		formify.clear();
-
-		if (formify.settings.showLoader) {
-			var style = "position:fixed;right:20px;top:0;z-index:9999;padding:5px 10px;";
-			style += "background-color:#eaa323;color:white;border-radius: 0px 0px 8px 8px";
-			var loader = '<div class="js-formify-loader" style="' + style + '">';
-			loader += 'Loading...</div>';
-			$('body').append(loader);
-		}
 
 		$($this).find('input[type="submit"]').prop('disabled', 'disabled');
 
@@ -101,15 +94,36 @@ $(function () {
 		}
 		var ajax_url = base_url + '?' + $.param(url_params);
 
-		$.ajax({
-			method: $($this).attr('method'),
-			url: ajax_url,
-			data: $($this).serialize(),
-			dataType: 'json',
-			processData: false,
-			async: true,
-			contentType: "multipart/form-data"
-		})
+		var halt = true;
+		if ($($this).data('confirm')) {
+			halt = true;
+			var r = confirm($($this).data('confirm'));
+			if (r) {
+				halt = false
+			}
+		} else {
+			halt = false;
+		}
+
+		if (halt == false) {
+
+			if (formify.settings.showLoader) {
+				var style = "position:fixed;right:20px;top:0;z-index:9999;padding:5px 10px;";
+				style += "background-color:#eaa323;color:white;border-radius: 0px 0px 8px 8px";
+				var loader = '<div class="js-formify-loader" style="' + style + '">';
+				loader += 'Loading...</div>';
+				$('body').append(loader);
+			}
+
+			$.ajax({
+				method: method,
+				url: ajax_url,
+				data: $($this).serialize(),
+				dataType: 'json',
+				processData: false,
+				async: true,
+				contentType: "multipart/form-data"
+			})
 
 			.done(function (data) {
 				if (typeof(data.callback) !== "undefined") {
@@ -135,6 +149,9 @@ $(function () {
 				}
 				$($this).find('input[type="submit"]').prop('disabled', '');
 			});
+		} else {
+			$($this).find('input[type="submit"]').prop('disabled', '');
+		}
 
 	});
 });
