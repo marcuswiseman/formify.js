@@ -31,4 +31,7 @@ function do_prompt(arg) {
 }
 ```
 
-Once the ajax request is complete, do_prompt will be executed
+Once the ajax request is complete, do_prompt will be executed.
+
+You can apply a confirm pormpt on a form using `<form data-confirm="Are you sure?"`
+this will prompt the user to confirm if they wish to continue with the form submission.
