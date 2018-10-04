@@ -1,5 +1,5 @@
 var formify = {};
-formify.settings = {showLoader: false};
+formify.settings = {showLoader: true};
 formify.loader = null;
 
 /*
@@ -20,6 +20,21 @@ formify.timeoutLoader = function (miliseconds = 2500) {
 			$('.js-formify-loader').remove();
 		}
 	}, miliseconds);
+}
+
+formify.getURLParameters = function (url) {
+	var result = {};
+	if (typeof(url) !== "undefined" && url != '') {
+		var searchIndex = url.indexOf("?");
+		if (searchIndex == -1) return result;
+		var sPageURL = url.substring(searchIndex + 1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++) {
+			var sParameterName = sURLVariables[i].split('=');
+			result[sParameterName[0]] = sParameterName[1];
+		}
+		return result;
+	}
 }
 
 $(function () {
@@ -57,6 +72,14 @@ $(function () {
 
 		e.preventDefault();
 
+		var $this = $(this);
+
+		var url = typeof($($this).attr('action')) !== 'undefined' ? $($this).attr('action') : '';
+		var base_url = url.indexOf('?') != -1 ? url.split('?')[0] : '';
+		if (url != '') {
+			var url_params = formify.getURLParameters(url);
+		}
+
 		formify.clear();
 
 		if (formify.settings.showLoader) {
@@ -67,11 +90,20 @@ $(function () {
 			$('body').append(loader);
 		}
 
-		var $this = $(this);
 		$($this).find('input[type="submit"]').prop('disabled', 'disabled');
+
+		if (typeof(url_params) !== 'undefined') {
+			url_params.action = $($this).data('action');
+		} else {
+			var url_params = {
+				action: $($this).data('action')
+			}
+		}
+		var ajax_url = base_url + '?' + $.param(url_params);
+
 		$.ajax({
 			method: $($this).attr('method'),
-			url: "?action=" + $($this).data('action'),
+			url: ajax_url,
 			data: $($this).serialize(),
 			dataType: 'json',
 			processData: false,
