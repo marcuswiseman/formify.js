@@ -75,7 +75,7 @@ $(function () {
 		var $this = $(this);
 
 		var url = typeof($($this).attr('action')) !== 'undefined' ? $($this).attr('action') : '';
-		var base_url = url.indexOf('?') != -1 ? url.split('?')[0] : '';
+		var base_url = url.indexOf('?') != -1 ? url.split('?')[0] : url;
 		if (url != '') {
 			var url_params = formify.getURLParameters(url);
 		}
